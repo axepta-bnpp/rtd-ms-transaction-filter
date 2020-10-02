@@ -1,10 +1,10 @@
 FROM openjdk:8-jdk-buster
 
 # copia del file prodotto da MVN su path /BATCH/bin
-COPY /target/*.jar /BATCH/bin/batch-transaction-filter.jar
+COPY target/*.jar /BATCH/bin/batch-transaction-filter.jar
 
 # copia di file di configurazione ed entrypoint.sh
-COPY docker-assets/entrypoint.sh /BATCH/bin/
+COPY entrypoint.sh /BATCH/bin/
 
 # creazione di un utente specifico per il batch e fornitura permessi
 RUN addgroup --system spring \
