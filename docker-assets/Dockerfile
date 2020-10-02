@@ -5,7 +5,6 @@ ARG JAR_FILE=../target/*.jar
 COPY ${JAR_FILE} /BATCH/bin/batch-transaction-filter.jar
 
 # copia di file di configurazione ed entrypoint.sh
-COPY config.properties /BATCH/conf/
 COPY entrypoint.sh /BATCH/bin/
 
 # creazione di un utente specifico per il batch e fornitura permessi
