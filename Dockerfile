@@ -7,10 +7,10 @@ COPY target/*.jar /BATCH/bin/batch-transaction-filter.jar
 COPY entrypoint.sh /BATCH/bin/
 
 # creazione di un utente specifico per il batch e fornitura permessi
-RUN addgroup --system spring \
-	&& adduser --system --ingroup spring spring \
-	&& chown spring:spring -R /BATCH/ \
-	&& chmod +x /BATCH/bin/entrypoint.sh
+#RUN addgroup --system spring \
+#	&& adduser --system --ingroup spring spring \
+#	&& chown spring:spring -R /BATCH/ \
+#	&& chmod +x /BATCH/bin/entrypoint.sh
 
 # avvio dell'applicazione
 ENTRYPOINT ["/BATCH/bin/entrypoint.sh"]
