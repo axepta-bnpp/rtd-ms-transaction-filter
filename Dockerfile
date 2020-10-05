@@ -11,7 +11,6 @@ RUN addgroup --system spring \
 	&& adduser --system --ingroup spring spring \
 	&& chown spring:spring -R /BATCH/ \
 	&& chmod +x /BATCH/bin/entrypoint.sh
-USER spring:spring
 
 # avvio dell'applicazione
 ENTRYPOINT ["/BATCH/bin/entrypoint.sh"]
