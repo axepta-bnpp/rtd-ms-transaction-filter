@@ -3,8 +3,9 @@ FROM openjdk:8-jdk-buster
 # copia del file prodotto da MVN su path /BATCH/bin
 COPY target/*.jar /BATCH/bin/batch-transaction-filter.jar
 
-# copia di file di configurazione ed entrypoint.sh
+# copia di entrypoint.sh e libreria mysql
 COPY entrypoint.sh /BATCH/bin/
+COPY mysql-connector-java-8.0.21.jar /BATCH/bin/
 
 # creazione di un utente specifico per il batch e fornitura permessi
 #RUN addgroup --system spring \
