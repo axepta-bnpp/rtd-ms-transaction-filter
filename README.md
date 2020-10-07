@@ -59,7 +59,7 @@ The Batch Acquirer is configurabile for contacting the salt recovery service, to
 and the hpan list recovery service, to be used for filtering the transaction records.
 To enabled this services, the following configuration properties must be enabled:
 _batchConfiguration.TransactionFilterBatch.saltRecovery.enabled_ 
-and _batchConfiguration.TransactionFilterBatch.hpanList.enabled_. 
+and _batchConfiguration.TransactionFilterBatch.hpanListRecovery.enabled_. 
 
 Endpoint configurations are through the properties _rest-client.hpan.base-url_, for the base configuration
 , and the endpoint properties for the two services respectively _rest-client.hpan.list.url_ and _rest-client.hpan.salt.url_.
@@ -333,7 +333,7 @@ Key |  Description | Default | Mandatory | Values
 --- | ------------ | ------- | ------------ | ------
 __batchConfiguration.TransactionFilterBatch.transactionSender.enabled__ | Indicates whether the sending to the sftp channel is active or not | ${ACQ_BATCH_TRX_SENDER_ENABLED:true} | YES | TRUE FALSE
 __batchConfiguration.TransactionFilterBatch.transactionFilter.sftp.localdirectory__ |Local directory from which to get the file to be sent on remote SFTP | ${SFTP_LOCAL_DIR:} | YES
-__batchConfiguration.TransactionFilterBatch.transactionFilter.sftp.remotedirectory__ | Remote SFTP directory to copy the file to | ${SFTP_REMOTE_DIR:} | YES
+__batchConfiguration.TransactionFilterBatch.transactionFilter.sftp.remotedirectory__ | Remote SFTP directory to copy the file to | ${SFTP_DIRECTORY:} | YES
 __batchConfiguration.TransactionFilterBatch.transactionFilter.sftp.filenamepattern__ | Name / pattern of the file to be moved to remote SFTP | ${SFTP_FILE_PATTERN:} | YES
 __batchConfiguration.TransactionFilterBatch.transactionFilter.sftp.filextension__ | File extension to copy to remote SFTP | ${SFTP_FILE_EXTENSION:} | NO
 __batchConfiguration.TransactionFilterBatch.transactionFilter.sftp.host__ | SFTP Host | ${SFTP_HOST:} | YES
@@ -389,12 +389,12 @@ __batchConfiguration.TransactionFilterBatch.transactionFilter.manageHpanOnSucces
 
 Key |  Description | Default | Mandatory | Values
 --- | ------------ | ------- | ------------ | ------
-__spring.datasource.driver-class-name__ | Classname for the driver to user | ${BATCH_DB_CLASS_NAME:} | YES
-__spring.datasource.url__ | Database connection url | ${BATCH_DB_CONN_URL:} | YES
-__spring.datasource.username__ | Database username for login | ${BATCH_DB_USERNAME:} | YES
-__spring.datasource.password__ | Database password for user login | ${BATCH_DB_USERNAME:} | YES
-__spring.datasource.hikari.schema__ | Database schema | ${BATCH_DB_SCHEMA:} | YES
-__spring.jpa.database-platform__ | Database dialect | ${BATCH_DB_DIALECT:} | YES
+__spring.datasource.driver-class-name__ | Classname for the driver to user | ${ACQ_BATCH_DB_CLASS_NAME:} | YES
+__spring.datasource.url__ | Database connection url | ${ACQ_BATCH_DB_CONN_URL:} | YES
+__spring.datasource.username__ | Database username for login | ${ACQ_BATCH_DB_USERNAME:} | YES
+__spring.datasource.password__ | Database password for user login | ${ACQ_BATCH_DB_PASSWORD:} | YES
+__spring.datasource.hikari.schema__ | Database schema | ${ACQ_BATCH_DB_SCHEMA:} | YES
+__spring.jpa.database-platform__ | Database dialect | ${ACQ_BATCH_DB_DIALECT:} | YES
 
 ### Appendix 3 - Process Debugging
 
