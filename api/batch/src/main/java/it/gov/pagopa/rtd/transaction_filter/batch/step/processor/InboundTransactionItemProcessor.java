@@ -26,6 +26,12 @@ public class InboundTransactionItemProcessor implements ItemProcessor<InboundTra
     private final HpanStoreService hpanStoreService;
     private final Boolean applyHashing;
     private final Boolean saveHashing;
+    private final Boolean enableAfterProcessFileLogging;
+
+
+    private static final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    private static final Validator validator = factory.getValidator();
+
 
     /**
      * Validates the input {@link InboundTransaction}, and filters the model, if the pan is not available
@@ -37,9 +43,6 @@ public class InboundTransactionItemProcessor implements ItemProcessor<InboundTra
      */
     @Override
     public InboundTransaction process(InboundTransaction inboundTransaction) {
-
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
 
         Set<ConstraintViolation<InboundTransaction>> constraintViolations = validator.validate(inboundTransaction);
         if (constraintViolations.size() > 0) {
@@ -55,9 +58,15 @@ public class InboundTransactionItemProcessor implements ItemProcessor<InboundTra
                 inboundTransaction.setPan(applyHashing ?
                         hpan : DigestUtils.sha256Hex(inboundTransaction.getPan()+hpanStoreService.getSalt()));
             }
-            return inboundTransaction;
+        } else {
+            if (enableAfterProcessFileLogging) {
+                inboundTransaction.setValid(false);
+            } else {
+                return null;
+            }
         }
-        return null;
+
+        return inboundTransaction;
     }
 
 }

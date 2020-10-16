@@ -40,7 +40,7 @@ Please refer to the properties in __Appendix 2 - Configuration properties__ to d
 __Note:__ As of today, Oracle RDBMS are subject to potential issues regarding the isolation level, as reported
 in the following [Issue Thread](https://github.com/spring-projects/spring-batch/issues/1127), the general approach to
 attempt to avoid similar problems, is to reduce the isolation level defined in the Spring Batch jobRepository 
-to either _ISOLAION_READ_COMMITTED_, or _ISOLAION_READ_UNCOMMITTED_. this is doable using the configuration property
+to either _ISOLATION_READ_COMMITTED_, or _ISOLATION_READ_UNCOMMITTED_. this is doable using the configuration property
 _batchConfiguration.TransactionFilterBatch.isolationForCreate_.
 
 ### Execution methods
@@ -52,6 +52,25 @@ the cron expression defined in the property _batchConfiguration.TransactionFilte
 
 __Note__: The property _spring.batch.job.enabled_ must as to be configured to false, when overriding the default
 property configurations.
+
+### Logging Configurations
+
+By default, only records that are either filtered, or have been stopped due to an error are logged, while records that
+have been processed normally are only logged if one of the following properties is enabled for the read, process, or writing phase:
+
+__batchConfiguration.TransactionFilterBatch.transactionFilter.readers.listener.enableAfterReadLogging__
+__batchConfiguration.TransactionFilterBatch.transactionFilter.readers.listener.enableAfterProcessLogging__
+__batchConfiguration.TransactionFilterBatch.transactionFilter.readers.listener.enableAfterWriteLogging__
+
+The frequency at which the normally processed records are logged is set up by the 
+__batchConfiguration.TransactionFilterBatch.transactionFilter.readers.listener.loggingFrequency__, above a frequency 
+of one record, the logs will be at the INFO level, while at 1 the log will be at DEBUG level.
+
+If is necessary to set-up this logging, if there are constraints in term of data volume, or performance, a suggested
+value of frequency would be around 10% of the normal record volume per file.
+
+Active logging/file writing in case of filtered records, or errors, can be disabled through the properties reported
+in __Appendix 2, Paragraph 4 - Batch properties - Transaction list reading__.
 
 ### REST Services Connection
 
@@ -326,6 +345,17 @@ __batchConfiguration.TransactionFilterBatch.transactionFilter.applyEncrypt__ | F
 __batchConfiguration.TransactionFilterBatch.transactionFilter.saveHashing__ | Flag to define whether to save the hashing of the pan in the result file | ${ACQ_BATCH_TRX_LIST_HASHING_SAVE:false} | YES | TRUE FALSE
 __batchConfiguration.TransactionFilterBatch.transactionFilter.linesToSkip__ | Number of lines to skip from the beginning of the file (e.g. to avoid the header ) | ${ACQ_BATCH_INPUT_LINES_TO_SKIP:0} | NO
 __batchConfiguration.TransactionFilterBatch.transactionFilter.transactionLogsPath__ | Path where the processed transaction records resulting in either an error, or getting filtered, are traced in .csv format |  file:/${ACQ_BATCH_TRX_LOGS_PATH:} | YES
+__batchConfiguration.TransactionFilterBatch.transactionFilter.readers.listener.enableAfterReadLogging__ | Property to enable logging for the read records | ${ACQ_BATCH_TRX_AFTER_READ_LOGGING_ENABLED:false} | YES | TRUE FALSE
+__batchConfiguration.TransactionFilterBatch.transactionFilter.readers.listener.enableOnReadErrorLogging__ | Property to enable logging for the records that had errors on the reading phase | ${ACQ_BATCH_TRX_READ_ERROR_LOGGING_ENABLED:true} | YES | TRUE FALSE
+__batchConfiguration.TransactionFilterBatch.transactionFilter.readers.listener.enableOnReadErrorFileLogging__ | Property to enable writing the records that had errors on the reading phase | ${ACQ_BATCH_TRX_READ_ERROR_FILE_LOGGING_ENABLED:true} | YES | TRUE FALSE
+__batchConfiguration.TransactionFilterBatch.transactionFilter.readers.listener.enableAfterProcessLogging__ | Property to enable logging for the processed records | ${ACQ_BATCH_TRX_AFTER_PROCESS_LOGGING_ENABLED:false} | YES | TRUE FALSE
+__batchConfiguration.TransactionFilterBatch.transactionFilter.readers.listener.enableAfterProcessFileLogging__ | Property to enable writing the records that had been filtered | ${ACQ_BATCH_TRX_AFTER_PROCESS_FILE_LOGGING_ENABLED:true} | YES | TRUE FALSE
+__batchConfiguration.TransactionFilterBatch.transactionFilter.readers.listener.enableOnProcessErrorLogging__ | Property to enable logging for the records that had errors on the processing phase | ${ACQ_BATCH_TRX_PROCESS_ERROR_LOGGING_ENABLED:true} | YES | TRUE FALSE
+__batchConfiguration.TransactionFilterBatch.transactionFilter.readers.listener.enableOnProcessErrorFileLogging__ | Property to enable writing the records that had errors on the processing phase | ${ACQ_BATCH_TRX_PROCESS_ERROR_FILE_LOGGING_ENABLED:true} | YES | TRUE FALSE
+__batchConfiguration.TransactionFilterBatch.transactionFilter.readers.listener.enableAfterWriteLogging__ | Property to enable logging for the written records | ${ACQ_BATCH_TRX_AFTER_WRITE_LOGGING_ENABLED:false} | YES | TRUE FALSE
+__batchConfiguration.TransactionFilterBatch.transactionFilter.readers.listener.enableOnWriteErrorLogging__ | Property to enable logging for the records that had errors on the writing phase | ${ACQ_BATCH_TRX_WRITE_ERROR_LOGGING_ENABLED:true} | YES | TRUE FALSE
+__batchConfiguration.TransactionFilterBatch.transactionFilter.readers.listener.enableOnWriteErrorFileLogging__ | Property to enable writing the records that had errors on the writing phase | ${ACQ_BATCH_TRX_WRITE_ERROR_FILE_LOGGING_ENABLED:true} | YES | TRUE FALSE
+__batchConfiguration.TransactionFilterBatch.transactionFilter.readers.listener.loggingFrequency__ | Logging frequency for transaction records | ${ACQ_BATCH_TRX_READ_LOGGING_FREQUENCY:10000} | YES
 
 #### 5. Batch properties - SFTP
 
@@ -381,8 +411,8 @@ __rest-client.hpan.trust-store.password__ | Trust-store password | ${HPAN_SERVIC
 
 Key |  Description | Default | Mandatory | Values
 --- | ------------ | ------- | ------------ | ------
-__batchConfiguration.TransactionFilterBatch.transactionFilter.deleteProcessedFiles__ | Enable deletion of any processed file (all files related to a batch computation) | ${FLAG_DELETE_LOCAL_FILE:true} | YES | TRUE FALSE
-__batchConfiguration.TransactionFilterBatch.transactionFilter.deleteOutputFiles__ | Define output files management rule | ${ACQ_BATCH_DELETE_LOCAL_FILE:ERROR} | YES | ALWAYS ERROR KEEP
+__batchConfiguration.TransactionFilterBatch.transactionFilter.deleteProcessedFiles__ | Enable deletion of any processed file (all files related to a batch computation) | ${ACQ_BATCH_DELETE_LOCAL_FILE:true} | YES | TRUE FALSE
+__batchConfiguration.TransactionFilterBatch.transactionFilter.deleteOutputFiles__ | Define output files management rule | ${ACQ_BATCH_DELETE_OUTPUT_FILE:ERROR} | YES | ALWAYS ERROR KEEP
 __batchConfiguration.TransactionFilterBatch.transactionFilter.manageHpanOnSuccess__ | Define HPAN files management rule on success | ${ACH_BATCH_HPAN_ON_SUCCESS:DELETE} | YES | DELETE ARCHIVE KEEP
 
 #### 8. Batch properties - Repository
